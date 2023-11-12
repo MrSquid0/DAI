@@ -1,9 +1,8 @@
 # Seed.py
-from pydantic import BaseModel, FilePath, Field, EmailStr, field_serializer
+from pydantic import BaseModel, Field, EmailStr, field_serializer
 from pathlib import Path
 import pathlib
 from pymongo import MongoClient
-from pprint import pprint
 from datetime import datetime
 from typing import Any
 import requests
