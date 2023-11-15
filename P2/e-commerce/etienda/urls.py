@@ -10,4 +10,5 @@ urlpatterns = [
     path("hombre-puntuacion", views.query_four, name="query_four"),
     path("facturacion-total", views.query_five, name="query_five"),
     path("facturacion-categoria", views.query_six, name="query_six"),
+    path("", views.home, name="home"),
 ]

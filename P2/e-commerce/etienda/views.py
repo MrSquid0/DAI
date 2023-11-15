@@ -2,6 +2,7 @@ import sys
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template import loader
 from django.http import HttpResponse
 from . import controller
 
@@ -79,7 +80,7 @@ def query_five(request):
 
 def query_six(request):
     res = ("<html>"
-           "<a href='../etienda'>Volver a la lista de consultas</a>"
+           "<a href='../etienda/2-1'>Volver a la lista de consultas</a>"
            "<h1>Facturación por categoría de producto</h1> <ul> "
            "</html>")
     facturacion_cada_categoria = controller.run_query_six()
@@ -90,3 +91,10 @@ def query_six(request):
                 f"  </ul>"
                 f"</html>")
     return HttpResponse(res)
+
+def home(request):
+    template = loader.get_template("home.html")
+    context = {
+        'mensaje': 'Bienvenidos a la tienda!'
+    }
+    return HttpResponse(template.render(context,request))
