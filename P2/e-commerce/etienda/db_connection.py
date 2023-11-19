@@ -1,4 +1,4 @@
 from pymongo import MongoClient
 
 def get_client():
-    return MongoClient('mongo', 27017)
+    return MongoClient('localhost', 27017)

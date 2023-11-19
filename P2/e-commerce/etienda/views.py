@@ -92,9 +92,50 @@ def query_six(request):
                 f"</html>")
     return HttpResponse(res)
 
+
 def home(request):
     template = loader.get_template("home.html")
+    categories = controller.categories()
+    products = controller.products()
+
+    # Obtener images aleatorias para cada categoría
+    category_images = {category: controller.images_category(category) for category in categories}
+
     context = {
-        'mensaje': 'Bienvenidos a la tienda!'
+        'products': products,
+        'categories': categories,
+        'category_images': category_images,
     }
-    return HttpResponse(template.render(context,request))
+
+    return HttpResponse(template.render(context, request))
+
+
+def categoryproducts(request, category):
+    template = loader.get_template("category_products.html")
+
+    # Filtra los productos por la categoría proporcionada en la URL
+    products = controller.products_by_category(category)
+    categories = controller.categories()
+
+
+    context = {
+        'message': "Products in " + category,
+        'products': products,
+        'categories': categories,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+def search_results(request):
+    query = request.GET.get('q', '')  # Obtén el término de búsqueda de la URL
+    products = controller.search_products(query)  # Implementa esta función en tu lógica de controlador
+    categories = controller.categories()
+
+    context = {
+        'query': query,
+        'products': products,
+        'categories': categories,
+    }
+
+    return render(request, 'search_results.html', context)

@@ -1,6 +1,5 @@
 # Ignore files of Pycharm and others
 
 **/data
-**/e-commerce/imágenes/*
 **/venv
 **/.idea
