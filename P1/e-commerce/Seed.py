@@ -54,7 +54,7 @@ class Compra(BaseModel):
 
 # Conexión con la BD
 # https://pymongo.readthedocs.io/en/stable/tutorial.html
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongo', 27017)
 
 tienda_db = client.tienda  # Base de Datos
 
@@ -74,7 +74,7 @@ compras_collection.drop()  # Borramos toda la colección de compras para no dupl
 
 
 # Elimina todas las imágenes antes de empezar a descargarlas
-ruta_absoluta = os.path.abspath("e-commerce/imágenes")
+ruta_absoluta = os.path.abspath("imágenes")
 for filename in os.listdir(ruta_absoluta):
     ruta_completa = os.path.join(ruta_absoluta, filename)
 
@@ -141,25 +141,29 @@ for compr in compras:
 # Consulta 1
 query1 = Queries.query1(productos_collection)
 for producto in query1:
-    print(f"{str(producto)}+\n")
+    print(f"{str(producto['nombre'])}\n")
+    print(f"{str(producto['precio'])}\n")
 print("\n\n")
 
 # Consulta 2
 query2 = Queries.query2(productos_collection)
 for producto in query2:
-    print(f"{str(producto)}+\n")
+    print(f"{str(producto['nombre'])}\n")
+    print(f"{str(producto['descripción'])}\n")
 print("\n\n")
 
 # Consulta 3
 query3 = Queries.query3(productos_collection)
 for producto in query3:
-    print(f"{str(producto)}+\n")
+    print(f"{str(producto['nombre'])}\n")
+    print(f"{str(producto['rating']['puntuación'])}\n")
 print("\n\n")
 
 # Consulta 4
 query4 = Queries.query4(productos_collection)
 for producto in query4:
-    print(f"{str(producto)}+\n")
+    print(f"{str(producto['nombre'])}\n")
+    print(f"{str(producto['rating']['puntuación'])}\n")
 print("\n\n")
 
 # Consulta 5

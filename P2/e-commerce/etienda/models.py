@@ -1,14 +1,10 @@
-from django.db import models
+import os
 
 from pydantic import BaseModel, Field, EmailStr, field_serializer
-from pathlib import Path
 import pathlib
-from pymongo import MongoClient
 from datetime import datetime
 from typing import Any
-import requests
-import Queries
-import os
+
 
 class Nota(BaseModel):
     puntuación: float = Field(ge=0., lt=5.)
@@ -23,7 +19,7 @@ class Producto(BaseModel):
     descripción: str
     categoría: str
     imágen: str | None
-    rating: Nota
+    rating: Nota | None
 
     @field_serializer('imágen')
     def serializaPath(self, val) -> str:
