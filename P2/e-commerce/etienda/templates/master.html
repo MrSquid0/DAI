@@ -16,13 +16,14 @@
         <a class="navbar-brand" href="{% url 'etienda:home' %}">Store</a>
 
         <div class="d-flex" style="color: black">
-          <div class="d-flex" style="color: black; margin-right: 15px">
-            <form class="d-flex" action="{% url 'etienda:search_results' %}" method="get">
-                <input class="form-control me-1" name="q" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-success" type="submit">Search</button>
-            </form>
+            <a href="{% url 'etienda:add-product' %}" class="btn btn-outline-light me-1">Add new product</a>
 
-          </div>
+            <div class="d-flex" style="color: black; margin-right: 15px">
+                <form class="d-flex" action="{% url 'etienda:search_results' %}" method="get">
+                    <input class="form-control me-1" name="q" type="text" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-success" type="submit">Search</button>
+                </form>
+            </div>
 
             <div class="btn-group ms-1 me-1">
                 <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,6 +43,7 @@
 </nav>
 
 {% endblock %}
+
 
 {% block content %}
 {% endblock %}

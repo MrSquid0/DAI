@@ -7,35 +7,50 @@
 
 {% block content %}
 <style>
-      .product-box {
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 5px;
-      text-align: center;
-      margin-top: 10px; /* Ajusta el margen superior según sea necesario */
-    }
-      .product-box img {
-        width: 200px; /* Tamaño deseado en píxeles */
-        height: 200px; /* Tamaño deseado en píxeles */
-        object-fit: cover; /* Esto asegura que la imagen mantenga sus proporciones y se ajuste al contenedor */
-    }
+  .product-box {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .product-box img {
+    width: 200px; /* Tamaño deseado en píxeles */
+    height: 200px; /* Tamaño deseado en píxeles */
+    object-fit: cover; /* Esto asegura que la imagen mantenga sus proporciones y se ajuste al contenedor */
+    text-align: center;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
 </style>
 
-    <h1>Search Results for "{{ query }}"</h1>
+<h1>Search results for "{{ query }}"</h1>
 
-    <div class="row">
+<div class="container mt-5">
+  <h1>{{ message }}</h1>
+  <div class="row">
     {% for product in products %}
       <div class="col-md-6">
         <div class="product-box">
-            {% with image_path=product|get_image_route %}
-    <img src="{% static image_path %}" alt="{{ product.nombre }}">
-{% endwith %}
-            <p>{{ product.nombre }}</p>
+          {% with image_path=product|get_image_route %}
+            <img src="{% static image_path %}" alt="{{ product.nombre }}">
+          {% endwith %}
+          <p><b>{{ product.nombre }}</b></p>
+          <p>{{ product.precio }}€</p>
+          <p>{{ product.descripción }}</p>
         </div>
       </div>
-      {% if forloop.counter|divisibleby:2 and not forloop.last %}
-        </div><div class="row">
-      {% endif %}
     {% endfor %}
   </div>
+</div>
+
 {% endblock %}

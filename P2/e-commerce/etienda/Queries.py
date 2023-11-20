@@ -1,3 +1,6 @@
+import pymongo
+
+
 def query1(productos_collection):
     print("===================================================")
     print("Electrónica entre 100 y 200€, ordenados por precio")
@@ -124,3 +127,11 @@ def image_of_product(productos_collection, nombre):
     product = productos_collection.find_one({'nombre': nombre})
 
     return product.get('imágen')
+
+def get_maximum_product_id(productos_collection):
+    max_product_id = productos_collection.find_one(
+        {},
+        sort=[("producto_id", pymongo.DESCENDING)],
+    )["producto_id"]
+
+    return max_product_id

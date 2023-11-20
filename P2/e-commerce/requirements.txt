@@ -6,3 +6,4 @@ email-validator==2.0
 typing-extensions==4.8
 django==4.2
 django-bootstrap-v5==1.0.11
+Pillow==10.1.0

@@ -1,10 +1,12 @@
 import sys
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
 from . import controller
+from .forms import ProductForm
+from .models import Producto
 
 
 def index_2_1(request):
@@ -128,6 +130,7 @@ def categoryproducts(request, category):
 
 
 def search_results(request):
+    template = loader.get_template("search_results.html")
     query = request.GET.get('q', '')  # Obtén el término de búsqueda de la URL
     products = controller.search_products(query)  # Implementa esta función en tu lógica de controlador
     categories = controller.categories()
@@ -138,4 +141,60 @@ def search_results(request):
         'categories': categories,
     }
 
-    return render(request, 'search_results.html', context)
+    return HttpResponse(template.render(context, request))
+
+
+import os
+from django.conf import settings
+
+
+def get_product_form(request):
+    template = loader.get_template("add-product.html")
+    categories = controller.categories()
+    tienda_productos = controller.get_tienda_db()
+
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            # Obtener la ruta del directorio de medios estáticos
+            static_images_dir = os.path.join(settings.BASE_DIR, 'static/images/')
+
+            # Guardar la imagen en el sistema de archivos
+            image_path = os.path.join(static_images_dir, form.cleaned_data['image'].name)
+            with open(image_path, 'wb') as destination:
+                for chunk in form.cleaned_data['image'].chunks():
+                    destination.write(chunk)
+
+            producto = Producto(
+                producto_id=controller.get_maximum_product_id() + 1,
+                nombre=form.cleaned_data['name'],
+                precio=form.cleaned_data['price'],
+                descripción=form.cleaned_data['description'],
+                categoría=form.cleaned_data['category'],
+                imágen=image_path,
+                rating=None,
+            )
+
+            tienda_productos.insert_one(producto.model_dump())
+
+            # Redirige a la página de agradecimiento
+            return HttpResponseRedirect("/etienda/thanks")
+    else:
+        form = ProductForm()
+
+    context = {
+        "form": form,
+        "categories": categories,
+    }
+    return HttpResponse(template.render(context, request))
+
+def thanks(request):
+    template = loader.get_template("thanks.html")
+    categories = controller.categories()
+
+    context = {
+        "categories": categories,
+    }
+
+    return HttpResponse(template.render(context, request))

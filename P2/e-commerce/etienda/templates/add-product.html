@@ -1,0 +1,50 @@
+{% extends "master.html" %}
+{% load static %}
+{% load custom_operators %}
+{% block title %}
+  New product
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center">Add a new product</h2>
+  <form action="{% url 'etienda:add-product' %}" method="post" class="mx-auto"
+        style="max-width: 400px;" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label"><b>Name</b></label>
+      <div class="input-group">
+        {{ form.name }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label"><b>Price</b></label>
+      <div class="input-group">
+        {{ form.price }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label"><b>Description</b></label>
+      <div class="input-group">
+        {{ form.description }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label"><b>Category</b></label>
+      <div class="input-group">
+        {{ form.category }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label"><b>Image</b></label>
+      <div class="input-group">
+        {{ form.image }}
+      </div>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+

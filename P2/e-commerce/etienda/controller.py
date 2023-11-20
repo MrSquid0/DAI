@@ -40,3 +40,9 @@ def search_products(query):
     # Puedes utilizar consultas a la base de datos, índices de búsqueda, etc.
     products = client.tienda.productos.find({'nombre': {'$regex': query, '$options': 'i'}})
     return products
+
+def get_maximum_product_id():
+    return Queries.get_maximum_product_id(client.tienda.productos)
+
+def get_tienda_db():
+    return client.tienda.productos
