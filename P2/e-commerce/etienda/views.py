@@ -10,6 +10,10 @@ from django.http import HttpResponse
 from . import controller
 from .forms import ProductForm
 from .models import Producto
+from django.contrib.admin.views.decorators import staff_member_required
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def index_2_1(request):
@@ -134,15 +138,21 @@ def categoryproducts(request, category):
 
 def search_results(request):
     template = loader.get_template("search_results.html")
-    query = request.GET.get('q', '')  # Obtén el término de búsqueda de la URL
-    products = controller.search_products(query)  # Implementa esta función en tu lógica de controlador
+    query = request.GET.get('q', '')  # Obtiene el término de búsqueda de la URL
+    products = controller.search_products(query)
     categories = controller.categories()
+
+    no_results = not bool(products)
 
     context = {
         'query': query,
         'products': products,
         'categories': categories,
+        'no_results': no_results,
     }
+
+    if not bool(products):
+        logger.warning("The search bar was used with no results")
 
     return HttpResponse(template.render(context, request))
 
@@ -151,6 +161,7 @@ import os
 from django.conf import settings
 
 
+@staff_member_required
 def get_product_form(request):
     template = loader.get_template("add-product.html")
     categories = controller.categories()
@@ -180,9 +191,11 @@ def get_product_form(request):
             )
 
             tienda_productos.insert_one(producto.model_dump())
-
+            logger.info('A new product was added to the e-commerce.')
             # Redirige a la página de agradecimiento
             return HttpResponseRedirect("/etienda/thanks")
+        else:
+            logger.error('The submitted form was not valid.')
     else:
         form = ProductForm()
 

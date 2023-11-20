@@ -16,7 +16,9 @@
         <a class="navbar-brand" href="{% url 'etienda:home' %}">Store</a>
 
         <div class="d-flex align-items-center" style="color: black">
-            <a href="{% url 'etienda:add-product' %}" class="btn btn-outline-light me-1">Add new product</a>
+            {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'etienda:add-product' %}" class="btn btn-outline-light me-1">Add new product</a>
+            {% endif %}
 
             <div style="color: black; margin-right: 15px">
                 <form class="d-flex" action="{% url 'etienda:search_results' %}" method="get">
@@ -43,7 +45,7 @@
                     <a href="{% url 'etienda:logout' %}">
                         <button class="btn btn-outline-light" type="button">Logout</button>
                     </a>
-                    <p class="m-1">Hi, {{ user.username }}!</p>
+                    <p class="m-1">Hi, {{ user.first_name }}!</p>
                 </div>
 
             {% else %}
