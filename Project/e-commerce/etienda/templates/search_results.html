@@ -6,32 +6,6 @@
 {% endblock %}
 
 {% block content %}
-<style>
-  .product-box {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 5px;
-    text-align: center;
-    margin: 10px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .product-box img {
-    width: 200px; /* Tamaño deseado en píxeles */
-    height: 200px; /* Tamaño deseado en píxeles */
-    object-fit: cover; /* Esto asegura que la imagen mantenga sus proporciones y se ajuste al contenedor */
-    text-align: center;
-  }
-
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-  }
-</style>
 
 <h1>Search results for "{{ query }}"</h1>
 
@@ -46,7 +20,8 @@
           {% endwith %}
           <p><b>{{ product.nombre }}</b></p>
           <p>{{ product.precio }}€</p>
-          <p>{{ product.descripción }}</p>
+          <button class="toggle-description-btn btn btn-primary" style="background-color: darkslategray">Description</button>
+          <p class="product-description" style="display: none;">{{ product.descripción }}</p>
         </div>
       </div>
     {% endfor %}

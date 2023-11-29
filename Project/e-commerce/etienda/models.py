@@ -1,7 +1,6 @@
 import os
 
-from pydantic import BaseModel, Field, EmailStr, field_serializer
-import pathlib
+from pydantic import BaseModel, FilePath, Field, EmailStr, ValidationError, validator
 from datetime import datetime
 from typing import Any
 
@@ -21,11 +20,11 @@ class Producto(BaseModel):
     imágen: str | None
     rating: Nota | None
 
-    @field_serializer('imágen')
-    def serializaPath(self, val) -> str:
-        if type(val) is pathlib.PosixPath:
-            return str(val)
-        return val
+    @validator('nombre')
+    def validate_first_letter(cls, value):
+        if not value or not value[0].isupper():
+            raise ValueError("The first letter of the name of the product must be uppercase.")
+        return value
 
 
 class Compra(BaseModel):

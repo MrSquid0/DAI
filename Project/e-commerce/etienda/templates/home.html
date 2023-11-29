@@ -5,24 +5,8 @@
   Home
 {% endblock %}
 
-<link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/minty/bootstrap.min.css">
 
 {% block content %}
-
-<style>
-    .category-box {
-        border: 1px solid #ddd;
-        padding: 15px;
-        border-radius: 5px;
-        text-align: center;
-    }
-
-    .category-box img {
-        width: 200px; /* Tamaño deseado en píxeles */
-        height: 200px; /* Tamaño deseado en píxeles */
-        object-fit: cover; /* Esto asegura que la imagen mantenga sus proporciones y se ajuste al contenedor */
-    }
-</style>
 
 <!-- Landing page -->
 <div class="container mt-5">
@@ -35,7 +19,7 @@
                         <img src="{% static image_path %}" alt="{{ category }}">
                     {% endwith %}
                     <h2><strong>{{ category }}</strong></h2>
-                    <a href="{% url 'etienda:category_products' category=category %}" class="btn btn-primary">View items</a>
+                    <a href="{% url 'etienda:category_products' category=category %}" class="btn btn-primary" style="background-color: darkslategray">View items</a>
                 </div>
             </div>
             {% if forloop.counter|divisibleby:2 and not forloop.last %}

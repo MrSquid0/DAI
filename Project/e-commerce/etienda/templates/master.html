@@ -7,13 +7,16 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <script src="{% static 'product_description_toggle.js' %}"></script>
 </head>
 <body>
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid" style="background-color: coral">
-        <a class="navbar-brand" href="{% url 'etienda:home' %}">Store</a>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
+    <div class="container-fluid p-3" style="background-color: darkslategray">
+        <a class="navbar-brand" style="color: white" href="{% url 'etienda:home' %}">Store</a>
 
         <div class="d-flex align-items-center" style="color: black">
             {% if user.is_authenticated and user.is_staff %}
@@ -45,7 +48,7 @@
                     <a href="{% url 'etienda:logout' %}">
                         <button class="btn btn-outline-light" type="button">Logout</button>
                     </a>
-                    <p class="m-1">Hi, {{ user.first_name }}!</p>
+                    <p class="m-1" style="color: white">Hi, {{ user.first_name }}!</p>
                 </div>
 
             {% else %}
@@ -53,7 +56,7 @@
                     <a href="{% url 'etienda:login' %}">
                         <button class="btn btn-outline-light" type="button">Log In</button>
                     </a>
-                    <p class="m-1">You are not logged in</p>
+                    <p class="m-1" style="color: white">You are not logged in</p>
                 </div>
             {% endif %}
         </div>

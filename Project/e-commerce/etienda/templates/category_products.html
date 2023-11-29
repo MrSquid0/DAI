@@ -1,0 +1,32 @@
+{% extends "master.html" %}
+{% load static %}
+{% load custom_operators %}
+{% block title %}
+  Category products
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-5">
+  <h1>{{ message }}</h1>
+  <div class="row">
+    {% for product in products %}
+      <div class="col-md-6">
+        <div class="product-box">
+          {% with image_path=product|get_image_route %}
+            <img src="{% static image_path %}" alt="{{ product.nombre }}">
+          {% endwith %}
+          <p><b>{{ product.nombre }}</b></p>
+          <p>{{ product.precio }}€</p>
+          <button class="toggle-description-btn btn btn-primary" style="background-color: darkslategray">Description</button>
+          <p class="product-description" style="display: none;">{{ product.descripción }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}
+

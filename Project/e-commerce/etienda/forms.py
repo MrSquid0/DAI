@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 from django import forms
 from django.core.validators import MinValueValidator, MinLengthValidator
-from pydantic import ValidationError
+from django.core.exceptions import ValidationError
 
 from . import controller
 

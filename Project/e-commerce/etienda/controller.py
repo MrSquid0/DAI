@@ -1,24 +1,15 @@
 from . import Queries
 from . import db_connection
+from bson.objectid import ObjectId
 
 client = db_connection.get_client()
-def run_query_one():
-    return list(Queries.query1(client.tienda.productos))
 
-def run_query_two():
-    return list(Queries.query2(client.tienda.productos))
+# buscar desde el string id
+# resu = client.tienda.productos.find_one({"_id": ObjectId(id)})
 
-def run_query_three():
-    return list(Queries.query3(client.tienda.productos))
-
-def run_query_four():
-    return list(Queries.query4(client.tienda.productos))
-
-def run_query_five():
-    return Queries.query5(client.tienda.productos, client.tienda.compras)
-
-def run_query_six():
-    return Queries.query6(client.tienda.productos, client.tienda.compras)
+# Añadir "id" desde "_id"
+# resu["id"] = str(resu.get('_id'))
+# del resu["_id"]
 
 def categories():
     return Queries.categories(client.tienda.productos)
@@ -44,5 +35,10 @@ def search_products(query):
 def get_maximum_product_id():
     return Queries.get_maximum_product_id(client.tienda.productos)
 
+
 def get_tienda_db():
     return client.tienda.productos
+
+
+def insert_product_to_db(product):
+    client.insert_one(product.model_dump())
