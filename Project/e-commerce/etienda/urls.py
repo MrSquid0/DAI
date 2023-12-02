@@ -1,4 +1,4 @@
-# urls.py
+# etienda/urls.py
 from django.urls import path, include
 from . import views
 from .api import api
@@ -6,8 +6,6 @@ from .api import api
 app_name = 'etienda'
 
 urlpatterns = [
-    # Rutas de la API
-    path("api/", api.urls),
 
     # Rutas normales
     path("", views.home, name="home"),

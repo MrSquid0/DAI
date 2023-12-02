@@ -1,3 +1,4 @@
+#Ecommerce/urls.py
 """
 URL configuration for Ecommerce project.
 
@@ -16,6 +17,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from ninja_extra import NinjaExtraAPI, api_controller, http_get
+from etienda.api import api
 
 urlpatterns = [
     path("etienda/", include("etienda.urls")),
