@@ -2,7 +2,6 @@
 from django.urls import path, include
 from . import views
 from .api import api
-
 app_name = 'etienda'
 
 urlpatterns = [

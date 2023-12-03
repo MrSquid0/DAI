@@ -23,4 +23,5 @@ from etienda.api import api
 urlpatterns = [
     path("etienda/", include("etienda.urls")),
     path("admin/", admin.site.urls),
+    path('etienda/api/', api.urls),
 ]
