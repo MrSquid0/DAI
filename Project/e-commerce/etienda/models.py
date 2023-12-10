@@ -3,12 +3,12 @@ import os
 from pydantic import BaseModel, FilePath, Field, EmailStr, ValidationError, validator
 from datetime import datetime
 from typing import Any
-from . import Queries
+from . import controller
 
 
 class Nota(BaseModel):
     puntuación: float = Field(ge=0., lt=5.)
-    cuenta: int = Field(ge=1)
+    cuenta: int = Field(ge=0)
 
 
 class Producto(BaseModel):
@@ -41,7 +41,7 @@ class Producto(BaseModel):
 
     @validator('categoría')
     def validate_category(cls, value):
-        categories = Queries.categories()
+        categories = controller.categories()
         if value not in categories:
             raise ValueError("The category is not valid.")
         return value

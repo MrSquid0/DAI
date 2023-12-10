@@ -90,7 +90,7 @@ def get_product_form(request):
                 descripción=form.cleaned_data['description'],
                 categoría=form.cleaned_data['category'],
                 imágen=image_path,
-                rating=None,
+                rating={'puntuación': 0, 'cuenta': 0},
             )
 
             controller.insert_product_to_db(producto)
