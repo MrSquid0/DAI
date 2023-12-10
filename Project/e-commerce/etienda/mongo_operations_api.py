@@ -1,3 +1,7 @@
+import os
+
+from django.conf import settings
+
 from . import db_connection
 from . import Queries
 
@@ -95,8 +99,22 @@ def modify_product(product_id: str, payload):
 
 
 def delete_product(product_id: str):
-    result = products_collection.delete_one({"producto_id": int(product_id)})
-    if result.deleted_count == 0:
+    # Get the product before deleting it
+    product = products_collection.find_one({"producto_id": int(product_id)})
+
+    if product:
+        # Get the image path
+        image_path = product.get("imágen", "")
+        # Delete the product from the database
+        result = products_collection.delete_one({"producto_id": int(product_id)})
+        if result.deleted_count == 0:
+            raise Exception("Product not found")
+        # Delete the image file
+        if image_path:
+            absolute_image_path = os.path.join(settings.BASE_DIR, image_path)
+            if os.path.exists(absolute_image_path):
+                os.remove(absolute_image_path)
+    else:
         raise Exception("Product not found")
 
 
