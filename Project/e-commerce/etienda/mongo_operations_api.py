@@ -1,6 +1,3 @@
-from bson.objectid import ObjectId
-from pymongo import MongoClient
-from .models import Producto
 from . import db_connection
 from . import Queries
 
@@ -74,13 +71,13 @@ def create_product(payload):
     return search_product(product_id)
 
 
-def modify_product(id: str, payload):
-    existing_product = products_collection.find_one({"producto_id": int(id)})
+def modify_product(product_id: str, payload):
+    existing_product = products_collection.find_one({"producto_id": int(product_id)})
 
     if existing_product:
         # Makes the update to the DB
         products_collection.update_one(
-            {"producto_id": int(id)},
+            {"producto_id": int(product_id)},
             {"$set":
                 {
                     "nombre": payload.title,
@@ -90,14 +87,42 @@ def modify_product(id: str, payload):
                     "rating": {'puntuación': payload.rating.rate, 'cuenta': payload.rating.count}
                 }})
 
-        return search_product(id)
+        return search_product(product_id)
 
     else:
         # If product not found, launches an exception
         raise Exception("Product not found")
 
 
-def delete_product(producto_id: str):
-    result = products_collection.delete_one({"producto_id": int(producto_id)})
+def delete_product(product_id: str):
+    result = products_collection.delete_one({"producto_id": int(product_id)})
     if result.deleted_count == 0:
         raise Exception("Product not found")
+
+
+def modify_rating(product_id, rate):
+    existing_product = products_collection.find_one({"producto_id": int(product_id)})
+
+    if existing_product:
+        current_rating = existing_product["rating"]["puntuación"]
+        current_count = existing_product["rating"]["cuenta"]
+
+        # Calculate the new average rating
+        new_rating = (current_rating * current_count + rate) / (current_count + 1)
+
+        # Truncate the new rating to 3 decimal places
+        new_rating = round(new_rating, 3)
+
+        # Makes the update to the DB
+        products_collection.update_one(
+            {"producto_id": int(product_id)},
+            {"$set":
+                {
+                    "rating": {'puntuación': new_rating, 'cuenta': current_count + 1}
+                }})
+
+        return search_product(product_id)
+
+    else:
+        # If product not found, launches an exception
+        raise Exception("Product not found.")

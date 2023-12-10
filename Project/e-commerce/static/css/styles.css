@@ -9,6 +9,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .product-box img {
@@ -49,4 +50,21 @@
 
 .has-error .text-danger {
   color: #a94442;
+}
+
+.star-rating {
+  display: inline-block;
+  font-size: 24px;
+  width: 24px; /* Ajusta según sea necesario */
+  text-align: center; /* Alinea el contenido al centro del ancho fijo */
+  cursor: pointer;
+  color: #ccc;
+}
+
+.star-rating:hover {
+  color: black; /* Color al pasar el ratón por encima */
+}
+
+.rating {
+    display: flex;
 }

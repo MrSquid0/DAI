@@ -1,9 +1,9 @@
 # etienda/api.py
-from ninja_extra import NinjaExtraAPI, api_controller, http_get
+from ninja_extra import NinjaExtraAPI
 from typing import List
-from ninja import NinjaAPI, Schema
-from ninja.security import django_auth, HttpBearer
-from pydantic import ValidationError, validator
+from ninja import  Schema
+from ninja.security import HttpBearer
+from pydantic import ValidationError
 from . import mongo_operations_api
 import logging
 
@@ -52,10 +52,10 @@ def get_list_of_products(request, start: int = 0, end: int = 10):
     return products
 
 
-@api.get("/products/{id}", tags=['DAI SHOP'], response={200: ProductSchema, 404: ErrorSchema}, auth=None)
-def get_product(request, id: str):
+@api.get("/products/{product_id}", tags=['DAI SHOP'], response={200: ProductSchema, 404: ErrorSchema}, auth=None)
+def get_product(request, product_id: str):
     try:
-        product = mongo_operations_api.search_product(id)
+        product = mongo_operations_api.search_product(product_id)
         return 200, product
     except:
         logger.error("The product was not found throughout the API!")
@@ -78,15 +78,15 @@ def add_product(request, payload: ProductSchemaIn):
         return 400, {"message": str(e)}
 
 
-@api.put("/products/{id}", tags=['DAI SHOP'], response={201: ProductSchema, 400: ErrorSchema})
-def modify_product(request, id: str, payload: ProductSchemaIn):
+@api.put("/products/{product_id}", tags=['DAI SHOP'], response={201: ProductSchema, 400: ErrorSchema})
+def modify_product(request, product_id: str, payload: ProductSchemaIn):
     if not payload.title or not payload.title[0].isupper():
         error_message = "The first letter of the product name must be uppercase."
         logger.error(f"There was a problem trying to add the product throughout the API! {error_message}")
         return 400, {"message": error_message}
 
     try:
-        data_modified = mongo_operations_api.modify_product(id, payload)
+        data_modified = mongo_operations_api.modify_product(product_id, payload)
         logger.info("A product was added throughout the API!")
         return 201, data_modified
     except ValidationError as e:
@@ -94,12 +94,22 @@ def modify_product(request, id: str, payload: ProductSchemaIn):
         return 400, {"message": str(e)}
 
 
-@api.delete("/products/{id}", tags=['DAI SHOP'], response={204: None, 404: ErrorSchema})
-def delete_product(request, id: str):
+@api.delete("/products/{product_id}", tags=['DAI SHOP'], response={204: None, 404: ErrorSchema})
+def delete_product(request, product_id: str):
     try:
-        mongo_operations_api.delete_product(id)
+        mongo_operations_api.delete_product(product_id)
         logger.info("A product was deleted throughout the API!")
         return 204, None
     except:
         logger.error("There was a problem trying to delete the product throughout the API!")
         return 404, {"message": "Product not found"}
+
+
+@api.put('/products/{product_id}/{rating}', tags=['DAI SHOP'], response={202: ProductSchema, 400: ErrorSchema})
+def add_rating(request, product_id: str, rating: float):
+    try:
+        result = mongo_operations_api.modify_rating(product_id, rating)
+        return 202, result
+    except Exception as e:
+        logger.error("There was a problem trying to modify the rating of a product throughout the API!")
+        return 404, {"message": str(e)}
