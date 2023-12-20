@@ -6,7 +6,7 @@ Application web of an ecommerce made with Django (Backend and Frontend).
 1. docker compose build
 2. docker compose up
 
-URL: URL: http://localhost:8000/etienda
+URL: http://localhost:8000/etienda
 
 ### Rest of time
 1. docker compose up
