@@ -11,7 +11,7 @@ Small FrontEnd made with React and served on Vite.
 
 URL: http://localhost:5173/
 
-### Rest of time
+### Other times
 1. npm run dev
 
 ## How to stop the server:

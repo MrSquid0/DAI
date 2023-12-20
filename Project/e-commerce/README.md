@@ -8,7 +8,7 @@ Application web of an ecommerce made with Django (Backend and Frontend).
 
 URL: http://localhost:8000/etienda
 
-### Rest of time
+### Other times
 1. docker compose up
 
 ## How to stop the server:
