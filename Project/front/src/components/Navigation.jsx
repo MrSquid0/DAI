@@ -6,14 +6,14 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-export default function Navigation({cambiado, setProductosF}) {
+export default function Navigation({changed, setProducts}) {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleSearch = async (event) => {
         event.preventDefault();
         const response = await fetch(`http://localhost:8000/etienda/api/searchproduct?product_info=${searchTerm}`);
         const data = await response.json();
-        setProductosF(data);
+        setProducts(data);
     };
 
     return (

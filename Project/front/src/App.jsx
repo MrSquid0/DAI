@@ -8,15 +8,15 @@ import { useEffect } from 'react'; // Add missing import statement
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
 function App() {
-  const [productos, setProductos] = useState([])
-  const [productosF, setProductosF] = useState([])
+  const [products, setProducts] = useState([])
+  const [productsF, setProductsF] = useState([])
 
-  const cambiado = (evento) => {
+  const changed = (evento) => {
     if (evento.target.value !== "") {
-      const filteredProductos = productos.filter((producto) => producto.category.includes(evento.target.value))
-      setProductosF(filteredProductos)
+      const filteredProductos = products.filter((producto) => producto.category.includes(evento.target.value))
+      setProductsF(filteredProductos)
     } else {
-      setProductosF(productos)
+      setProductsF(products)
     }
 
     console.log(evento.target.value)
@@ -26,15 +26,15 @@ function App() {
     fetch("http://localhost:8000/etienda/api/products?start=0&end=100")
       .then((response) => response.json())
       .then((prods) => {
-        setProductos(prods)
-        setProductosF(prods)
+        setProducts(prods)
+        setProductsF(prods)
       });
   }, [])
 
   return (
     <>
-      <Navigation cambiado={cambiado} setProductosF={setProductosF}/>
-      <Results productos={productosF}/>
+      <Navigation changed={changed} setProducts={setProductsF}/>
+      <Results products={productsF}/>
     </>
   )
 }

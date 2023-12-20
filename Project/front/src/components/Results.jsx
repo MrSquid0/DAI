@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { Rating } from 'primereact/rating';
 
-export default function Results({ productos }) {
+export default function Results({ products }) {
   const [showDescription, setShowDescription] = useState({});
 
   const handleDescriptionClick = (id) => {
@@ -15,7 +15,7 @@ export default function Results({ productos }) {
 
   return (
       <Row xs={1} md={2} className="g-4">
-        {productos.map((producto) => (
+        {products.map((producto) => (
             <Col key={producto.id}>
               <Card>
                 <Card.Img variant="top" src={`${producto.image}`}/>
