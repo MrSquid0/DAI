@@ -1,3 +1,13 @@
+function colorStarsBasedOnRating() {
+  $('.product-box').each(function() {
+    var starRating = $(this).find('.star-rating');
+    var averageRating = $(this).find('#average-rating-' + $(this).find('.star-rating').data('product_id')).text().split(' ')[1];
+
+    // Fills all the stars up to the average rating
+    starRating.slice(0, Math.round(averageRating)).css('color', 'black');
+  });
+}
+
 $(document).ready(function() {
   $('.product-box').each(function() {
     var starRating = $(this).find('.star-rating');
@@ -11,14 +21,13 @@ $(document).ready(function() {
     starRating.on('mouseleave', function() {
       // Resets all the stars to the original color
       starRating.css('color', '#ccc');
+      // Recolors the stars based on the current rating
+      colorStarsBasedOnRating();
     });
 
     starRating.on('click', function() {
       var productId = $(this).data('product_id');
       var ratingValue = $(this).data('rating');
-
-      console.log(productId)
-      console.log(ratingValue)
 
       $.ajax({
         type: 'PUT',
@@ -40,4 +49,5 @@ $(document).ready(function() {
       });
     });
   });
+  colorStarsBasedOnRating();
 });

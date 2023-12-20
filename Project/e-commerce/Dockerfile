@@ -6,6 +6,4 @@ COPY . /e-commerce
 COPY requirements.txt /e-commerce/requirements.txt
 RUN pip install -r requirements.txt
 
-RUN apk update && apk add npm
-
-RUN npm install react-bootstrap bootstrap
+RUN python -m pip install django-cors-headers

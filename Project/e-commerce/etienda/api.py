@@ -55,7 +55,7 @@ def get_list_of_products(request, start: int = 0, end: int = 10):
 @api.get("/products/{product_id}", tags=['DAI SHOP'], response={200: ProductSchema, 404: ErrorSchema}, auth=None)
 def get_product(request, product_id: str):
     try:
-        product = mongo_operations_api.search_product(product_id)
+        product = mongo_operations_api.get_product(product_id)
         return 200, product
     except:
         logger.error("The product was not found throughout the API!")
@@ -112,4 +112,14 @@ def add_rating(request, product_id: str, rating: float):
         return 202, result
     except Exception as e:
         logger.error("There was a problem trying to modify the rating of a product throughout the API!")
+        return 404, {"message": str(e)}
+
+
+@api.get("/searchproduct", tags=['DAI SHOP'], response={202: list[ProductSchema], 400: ErrorSchema}, auth=None)
+def search_product(request, product_info: str):
+    try:
+        products = mongo_operations_api.coincidences_by_name_or_description(product_info)
+        return 202, products
+    except Exception as e:
+        logger.error("There was a problem trying to search a product throughout the API!")
         return 404, {"message": str(e)}

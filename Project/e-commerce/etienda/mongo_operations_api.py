@@ -4,6 +4,10 @@ from django.conf import settings
 
 from . import db_connection
 from . import Queries
+import logging
+import re
+
+logger = logging.getLogger(__name__)
 
 client = db_connection.get_client()
 products_collection = client.tienda.productos
@@ -36,7 +40,7 @@ def list_products(start: int, end: int):
     return products_converted
 
 
-def search_product(producto_id: str):
+def get_product(producto_id: str):
     product = products_collection.find_one({"producto_id": int(producto_id)})
 
     if product:
@@ -72,7 +76,7 @@ def create_product(payload):
     })
 
     # Retorna el producto recién creado
-    return search_product(product_id)
+    return get_product(product_id)
 
 
 def modify_product(product_id: str, payload):
@@ -91,7 +95,7 @@ def modify_product(product_id: str, payload):
                     "rating": {'puntuación': payload.rating.rate, 'cuenta': payload.rating.count}
                 }})
 
-        return search_product(product_id)
+        return get_product(product_id)
 
     else:
         # If product not found, launches an exception
@@ -139,8 +143,39 @@ def modify_rating(product_id, rate):
                     "rating": {'puntuación': new_rating, 'cuenta': current_count + 1}
                 }})
 
-        return search_product(product_id)
+        return get_product(product_id)
 
     else:
         # If product not found, launches an exception
         raise Exception("Product not found.")
+
+
+def coincidences_by_name_or_description(search_query):
+    # Crear un patrón de regex insensible a mayúsculas
+    pattern = f".*{search_query}.*"
+    regex = {"$regex": pattern, "$options": "i"}
+
+    # Buscar en los campos 'nombre' y 'descripción'
+    products = products_collection.find({"$or": [{"nombre": regex}, {"descripción": regex}]})
+    lista_de_productos = []
+
+    for product in products:
+        rating = product.get("rating", {})
+
+        product_dict = {
+            "id": str(product.get('producto_id')),
+            "title": product.get("nombre", ""),
+            "price": product.get("precio", 0.0),
+            "description": product.get("descripción", ""),
+            "category": product.get("categoría", ""),
+            "image": product.get("imágen", ""),  # Corregir el nombre del campo
+            "rating": {
+                "rate": rating.get("puntuación", 0),  # Manejar casos donde 'puntuación' puede faltar
+                "count": rating.get("cuenta", 0),  # Manejar casos donde 'cuenta' puede faltar
+            }
+        }
+
+        lista_de_productos.append(product_dict)
+
+    return lista_de_productos
+
