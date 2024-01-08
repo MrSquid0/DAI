@@ -123,3 +123,23 @@ def search_product(request, product_info: str):
     except Exception as e:
         logger.error("There was a problem trying to search a product throughout the API!")
         return 404, {"message": str(e)}
+
+
+@api.get("/category/{category}", tags=['DAI SHOP'], response={202: List[ProductSchema]}, auth=None)
+def get_products_by_category(request, category: str):
+    try:
+        products = mongo_operations_api.get_products_by_category(category)
+        return 202, products
+    except Exception as e:
+        logger.error("There was a problem trying to list the products of " + category + " throughout the API!")
+        return 404, {"message": str(e)}
+
+
+@api.get("/categories", tags=['DAI SHOP'], response={202: List[str], 404: ErrorSchema}, auth=None)
+def get_categories(request):
+    try:
+        categories = mongo_operations_api.get_categories()
+        return 202, categories
+    except Exception as e:
+        logger.error("There was a problem trying to list the categories throughout the API!")
+        return 404, {"message": str(e)}

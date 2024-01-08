@@ -179,3 +179,34 @@ def coincidences_by_name_or_description(search_query):
 
     return lista_de_productos
 
+
+def get_products_by_category(category: str):
+    products = products_collection.find({"categoría": category})
+    products_converted = []
+
+    for product in products:
+        product_dict = {
+            "id": str(product.get('producto_id')),
+            "title": product.get("nombre", ""),
+            "price": product.get("precio", 0.0),
+            "description": product.get("descripción", ""),
+            "category": product.get("categoría", ""),
+            "image": product.get("imágen", ""),
+            "rating": {
+                "rate": product["rating"]["puntuación"],
+                "count": product["rating"]["cuenta"],
+            }
+        }
+
+        if '_id' in product_dict:
+            del product_dict["_id"]
+
+        products_converted.append(product_dict)
+
+    return products_converted
+
+
+def get_categories():
+    categories_cursor = products_collection.distinct('categoría')
+    categories_list = [category for category in categories_cursor]
+    return categories_list

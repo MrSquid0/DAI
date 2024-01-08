@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
@@ -8,10 +8,25 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 export default function Navigation({changed, setProducts}) {
     const [searchTerm, setSearchTerm] = useState("");
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        fetch("http://localhost:8000/etienda/api/categories")
+            .then((response) => response.json())
+            .then((cats) => {
+                setCategories(cats);
+            });
+    }, []);
 
     const handleSearch = async (event) => {
         event.preventDefault();
         const response = await fetch(`http://localhost:8000/etienda/api/searchproduct?product_info=${searchTerm}`);
+        const data = await response.json();
+        setProducts(data);
+    };
+
+    const handleCategoryClick = async (category) => {
+        const response = await fetch(`http://localhost:8000/etienda/api/category/${category}`);
         const data = await response.json();
         setProducts(data);
     };
@@ -27,6 +42,13 @@ export default function Navigation({changed, setProducts}) {
                     style={{ maxHeight: '100px' }}
                     navbarScroll
                 >
+                    <NavDropdown title="Categories" id="navbarScrollingDropdown">
+                        {categories.map((category, index) => (
+                            <NavDropdown.Item key={index} onClick={() => handleCategoryClick(category)}>
+                                {category}
+                            </NavDropdown.Item>
+                        ))}
+                    </NavDropdown>
                 </Nav>
                 <Form className="d-flex" onSubmit={handleSearch}>
                     <Form.Control

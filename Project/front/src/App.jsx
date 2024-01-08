@@ -1,11 +1,8 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Navigation from './components/Navigation.jsx'
 import Results from './components/Results.jsx'
-import { useEffect } from 'react'; // Add missing import statement
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+import { useEffect } from 'react';
 
 function App() {
   const [products, setProducts] = useState([])

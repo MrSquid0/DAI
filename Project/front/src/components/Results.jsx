@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import { Rating } from 'primereact/rating';
 
-export default function Results({ products }) {
+export default function Results({ products, currentCategory }) {
   const [showDescription, setShowDescription] = useState({});
 
   const handleDescriptionClick = (id) => {
